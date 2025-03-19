@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const path = require('path');
 const cors = require('cors'); // Adicionado para permitir requisições de diferentes origens
 const app = express();
-const port = process.env.PORT || 3001; // Usar a porta do ambiente ou 3000
+const port = process.env.PORT || 3000; // Usar a porta do ambiente ou 3000
 
 // Configuração da conexão com o MySQL
 const connection = mysql.createConnection({
