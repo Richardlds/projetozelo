@@ -7,10 +7,19 @@ const port = process.env.PORT || 3000; // Usar a porta do ambiente ou 3000
 
 // Configuração da conexão com o MySQL
 const connection = mysql.createConnection({
-    host: 'localhost', // Substitua pelo host do seu banco de dados
-    user: 'root', // Substitua pelo seu usuário do MySQL
-    password: '@Richard12e', // Substitua pela sua senha do MySQL
-    database: 'atendimentos_db' // Substitua pelo nome do seu banco de dados
+    host: process.env.DB_HOST || 'localhost', // Substitua pelo host do seu banco de dados
+    user: process.env.DB_USER || 'root', // Substitua pelo seu usuário do MySQL
+    password: process.env.DB_PASSWORD || '@Richard12e', // Substitua pela sua senha do MySQL
+    database: process.env.DB_NAME || 'atendimentos_db' // Substitua pelo nome do seu banco de dados
+});
+
+// Conectar ao banco de dados
+connection.connect((err) => {
+    if (err) {
+        console.error('Erro ao conectar ao banco de dados:', err);
+        process.exit(1); // Encerra o processo em caso de erro
+    }
+    console.log('Conectado ao banco de dados MySQL');
 });
 
 // Middleware para permitir o uso de JSON e CORS
