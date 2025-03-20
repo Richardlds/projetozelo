@@ -55,9 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Atualiza a lista de observações
     function atualizarListaObservacoes() {
         listaObservacoes.innerHTML = ''; // Limpa a lista antes de recarregar
+
         atendimento.observacoes.forEach(obs => {
             const li = document.createElement('li');
-            li.textContent = obs;
+
+            // Substitui quebras de linha por <br>
+            const textoFormatado = obs.replace(/\n/g, '<br>');
+            li.innerHTML = textoFormatado; // Usa innerHTML para renderizar as tags <br>
+
             listaObservacoes.appendChild(li);
         });
     }
@@ -65,10 +70,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Adiciona uma nova observação
     btnAdicionarObservacao.addEventListener('click', function () {
         const observacao = campoObservacoes.value.trim();
+
         if (observacao) {
-            atendimento.observacoes.push(observacao); // Adiciona a nova observação ao array
-            atualizarListaObservacoes(); // Atualiza a lista de observações
-            campoObservacoes.value = ''; // Limpa o campo de texto
+            // Adiciona a nova observação ao array
+            atendimento.observacoes.push(observacao);
+
+            // Atualiza a lista de observações
+            atualizarListaObservacoes();
+
+            // Limpa o campo de texto
+            campoObservacoes.value = '';
 
             // Salva no localStorage
             localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
