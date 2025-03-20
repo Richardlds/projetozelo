@@ -14,7 +14,7 @@ app.use(cors({
 }));
 
 // Conectar ao MongoDB Atlas
-const dbURI = process.env.DB_URI || 'mongodb+srv://richardlds2005:@Richard12e@zeloup.kclxl.mongodb.net/?retryWrites=true&w=majority&appName=ZELOUP';
+const dbURI = process.env.DB_URI || 'mongodb+srv://richardlds2005:Gorila12e@zeloup.kclxl.mongodb.net/?retryWrites=true&w=majority&appName=ZELOUP';
 mongoose.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
