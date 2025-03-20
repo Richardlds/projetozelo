@@ -198,7 +198,7 @@ form button:hover {
     background-color: #0056b3;
 }
 
-/* Estilos para o modal de confirmação */
+/* Estilo para o modal de confirmação */
 #modalConfirmacao {
     display: none;
     position: fixed;
@@ -218,6 +218,7 @@ form button:hover {
     width: 90%;
     max-width: 400px;
     text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 #modalConfirmacao button {

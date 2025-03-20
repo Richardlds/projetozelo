@@ -12,14 +12,30 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         // Captura os dados do formulário
+        const numeroVegas = document.getElementById('numeroVegas').value.trim();
+        const cpfTitular = document.getElementById('cpfTitular').value.trim();
+        const nomeTitular = document.getElementById('nomeTitular').value.trim();
+        const nomeFalecido = document.getElementById('nomeFalecido').value.trim();
+        const cidadeEstado = document.getElementById('cidadeEstado').value.trim();
+        const prestador = document.getElementById('prestador').value.trim();
+        const status = document.getElementById('status').value;
+
+        // Valida se todos os campos obrigatórios foram preenchidos
+        if (!numeroVegas || !cpfTitular || !nomeTitular || !nomeFalecido || !cidadeEstado || !prestador || !status) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        // Cria o objeto do atendimento
         const atendimento = {
-            numeroVegas: document.getElementById('numeroVegas').value,
-            cpfTitular: document.getElementById('cpfTitular').value,
-            nomeTitular: document.getElementById('nomeTitular').value,
-            nomeFalecido: document.getElementById('nomeFalecido').value,
-            cidadeEstado: document.getElementById('cidadeEstado').value,
-            prestador: document.getElementById('prestador').value,
-            status: document.getElementById('status').value,
+            numeroVegas,
+            cpfTitular,
+            nomeTitular,
+            nomeFalecido,
+            cidadeEstado,
+            prestador,
+            status,
+            observacoes: [], // Observações são opcionais e começam vazias
         };
 
         // Adiciona o atendimento ao array
@@ -27,6 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Atualiza a tabela correspondente ao status
         atualizarTabela(atendimento);
+
+        // Exibe o pop-up de confirmação
+        mostrarPopupConfirmacao();
 
         // Fecha a modal e limpa o formulário
         fecharModal();
@@ -43,8 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <td>${atendimento.nomeFalecido}</td>
             <td>${atendimento.cidadeEstado}</td>
             <td>${atendimento.prestador}</td>
-            <td><button onclick="editarAtendimento('${atendimento.numeroVegas}')">Editar</button></td>
         `;
+
+        // Adiciona um evento de clique na linha para abrir o atendimento
+        row.addEventListener('click', () => abrirDetalhes(atendimento.numeroVegas));
 
         // Adiciona a linha na tabela correta
         if (atendimento.status === 'emAndamento') {
@@ -56,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Função para abrir a modal
+    // Função para abrir a modal de adicionar atendimento
     document.getElementById('abrirModal').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'flex';
     });
@@ -68,4 +89,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fechar modal ao clicar no "X"
     document.querySelector('.fecharModal').addEventListener('click', fecharModal);
+
+    // Função para abrir os detalhes do atendimento
+    function abrirDetalhes(numeroVegas) {
+        // Redireciona para a página de detalhes com o número do Vegas como parâmetro
+        window.location.href = `detalhes.html?numeroVegas=${numeroVegas}`;
+    }
+
+    // Função para mostrar o pop-up de confirmação
+    function mostrarPopupConfirmacao() {
+        const modalConfirmacao = document.getElementById('modalConfirmacao');
+        modalConfirmacao.style.display = 'flex';
+
+        // Fecha o pop-up após 2 segundos e redireciona para a tela de atendimentos
+        setTimeout(() => {
+            modalConfirmacao.style.display = 'none';
+        }, 2000);
+    }
 });

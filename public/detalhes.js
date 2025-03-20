@@ -4,17 +4,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const campoObservacoes = document.getElementById('observacoes');
     const btnAdicionarObservacao = document.getElementById('adicionarObservacao');
 
-    // Simulação de um atendimento carregado (você pode buscar isso de um array ou API)
-    const atendimento = {
-        numeroVegas: '12345',
-        cpfTitular: '123.456.789-00',
-        nomeTitular: 'Fulano de Tal',
-        nomeFalecido: 'Ciclano de Tal',
-        cidadeEstado: 'São Paulo/SP',
-        prestador: 'Hospital X',
-        status: 'emAndamento',
-        observacoes: [],
-    };
+    // Captura o número do Vegas da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const numeroVegas = urlParams.get('numeroVegas');
+
+    // Simulação de um array de atendimentos (substitua por dados reais)
+    const atendimentos = [
+        {
+            numeroVegas: '12345',
+            cpfTitular: '123.456.789-00',
+            nomeTitular: 'Fulano de Tal',
+            nomeFalecido: 'Ciclano de Tal',
+            cidadeEstado: 'São Paulo/SP',
+            prestador: 'Hospital X',
+            status: 'emAndamento',
+            observacoes: [],
+        },
+        // Adicione mais atendimentos aqui...
+    ];
+
+    // Busca o atendimento pelo número do Vegas
+    const atendimento = atendimentos.find(at => at.numeroVegas === numeroVegas);
+
+    if (!atendimento) {
+        alert('Atendimento não encontrado!');
+        window.location.href = 'index.html'; // Redireciona para a lista de atendimentos
+        return;
+    }
 
     // Carrega os dados do atendimento no formulário
     function carregarDados() {
