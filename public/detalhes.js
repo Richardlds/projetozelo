@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Busca os detalhes do atendimento
-    fetch(`http://localhost:3000/atendimentos/${numeroVegas}`)
+    fetch(`https://projetozelo.onrender.com/atendimentos/${numeroVegas}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Erro ao buscar atendimento.");
@@ -47,14 +47,19 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("adicionarObservacao").addEventListener("click", function () {
                 const observacao = document.getElementById("observacoes").value;
                 if (observacao) {
-                    fetch(`http://localhost:3000/atendimentos/${numeroVegas}/observacoes`, {
+                    fetch(`https://projetozelo.onrender.com/atendimentos/${numeroVegas}/observacoes`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ observacao })
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Erro ao adicionar observação.");
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         const li = document.createElement("li");
                         li.textContent = observacao;
@@ -63,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .catch(error => {
                         console.error('Erro ao adicionar observação:', error);
+                        alert("Erro ao adicionar observação. Verifique o console para mais detalhes.");
                     });
                 }
             });
@@ -80,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     status: document.getElementById("status").value
                 };
 
-                fetch(`http://localhost:3000/atendimentos/${numeroVegas}`, {
+                fetch(`https://projetozelo.onrender.com/atendimentos/${numeroVegas}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -121,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Confirma a deleção
             btnConfirmarDelecao.addEventListener("click", function () {
-                fetch(`http://localhost:3000/atendimentos/${numeroVegas}`, {
+                fetch(`https://projetozelo.onrender.com/atendimentos/${numeroVegas}`, {
                     method: 'DELETE'
                 })
                 .then(response => {

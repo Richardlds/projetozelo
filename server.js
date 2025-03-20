@@ -14,11 +14,13 @@ app.use(cors({
 }));
 
 // Conectar ao MongoDB Atlas
-const dbURI = process.env.DB_URI || 'mongodb+srv://richardlds2005:Gorila12e@zeloup.kclxl.mongodb.net/?retryWrites=true&w=majority&appName=ZELOUP';
-mongoose.connect(dbURI, {
-})
-.then(() => console.log('Conectado ao MongoDB Atlas'))
-.catch(err => console.error('Erro ao conectar ao MongoDB Atlas:', err));
+const dbURI = process.env.DB_URI || 'mongodb+srv://richardlds2005:Gorila12e@zeloup.kclxl.mongodb.net/ZELOUP?retryWrites=true&w=majority';
+mongoose.connect(dbURI)
+    .then(() => console.log('Conectado ao MongoDB Atlas'))
+    .catch(err => {
+        console.error('Erro ao conectar ao MongoDB Atlas:', err);
+        process.exit(1); // Encerra o processo em caso de erro de conexão
+    });
 
 // Definir o schema para atendimentos
 const atendimentoSchema = new mongoose.Schema({
@@ -53,9 +55,11 @@ app.get('/', (req, res) => {
 app.get('/atendimentos', async (req, res) => {
     try {
         const atendimentos = await Atendimento.find();
+        console.log('Atendimentos encontrados:', atendimentos); // Log para depuração
         res.json(atendimentos);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao buscar atendimentos:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -68,7 +72,8 @@ app.get('/atendimentos/:numeroVegas', async (req, res) => {
         }
         res.json(atendimento);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao buscar atendimento:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -100,9 +105,10 @@ app.post('/atendimentos', async (req, res) => {
         });
 
         await novoAtendimento.save();
-        res.json({ id: novoAtendimento._id });
+        res.status(201).json({ id: novoAtendimento._id });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao adicionar atendimento:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -128,7 +134,8 @@ app.put('/atendimentos/:numeroVegas', async (req, res) => {
 
         res.json({ message: 'Atendimento atualizado com sucesso', atendimento: atendimentoAtualizado });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao atualizar atendimento:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -143,7 +150,8 @@ app.delete('/atendimentos/:numeroVegas', async (req, res) => {
 
         res.json({ message: 'Atendimento excluído com sucesso' });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao excluir atendimento:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -162,9 +170,10 @@ app.post('/atendimentos/:numeroVegas/observacoes', async (req, res) => {
         });
 
         await novaObservacao.save();
-        res.json({ id: novaObservacao._id });
+        res.status(201).json({ id: novaObservacao._id });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao adicionar observação:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
@@ -174,7 +183,8 @@ app.get('/atendimentos/:numeroVegas/observacoes', async (req, res) => {
         const observacoes = await Observacao.find({ numeroVegas: req.params.numeroVegas });
         res.json(observacoes);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('Erro ao buscar observações:', err); // Log detalhado do erro
+        res.status(500).json({ error: 'Erro interno no servidor' });
     }
 });
 
