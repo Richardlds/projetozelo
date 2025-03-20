@@ -35,16 +35,24 @@ document.addEventListener("DOMContentLoaded", function () {
     // Função para carregar os atendimentos
     async function carregarAtendimentos() {
         try {
+            console.log('Iniciando requisição para buscar atendimentos...'); // Log para depuração
             const response = await fetch(`${API_URL}/atendimentos`);
+            console.log('Resposta recebida:', response); // Log para depuração
+
             if (!response.ok) {
-                throw new Error('Erro ao buscar atendimentos');
+                const errorData = await response.json(); // Captura a mensagem de erro do backend
+                console.error('Erro na resposta:', errorData); // Log para depuração
+                throw new Error(errorData.error || 'Erro ao buscar atendimentos');
             }
+
             const data = await response.json();
+            console.log('Dados recebidos:', data); // Log para depuração
+
             renderizarTabela("emAndamento", data.filter(item => item.status === 'emAndamento'));
             renderizarTabela("zeloInforma", data.filter(item => item.status === 'zeloInforma'));
             renderizarTabela("finalizado", data.filter(item => item.status === 'finalizado'));
         } catch (error) {
-            console.error('Erro ao buscar atendimentos:', error);
+            console.error('Erro ao buscar atendimentos:', error); // Log detalhado do erro
             alert('Erro ao buscar atendimentos. Verifique o console para mais detalhes.');
         }
     }
