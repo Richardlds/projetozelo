@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const abrirModalBtn = document.querySelector("#abrirModal");
     const fecharModalBtn = document.querySelector(".fecharModal");
     const form = document.querySelector("#formAtendimento");
-    const API_URL = 'http://https://projetozelo.onrender.com'; // URL do backend
+    const API_URL = 'https://projetozelo.onrender.com'; // URL do backend
 
     // Função para renderizar a tabela de uma aba
     function renderizarTabela(aba, dados) {
