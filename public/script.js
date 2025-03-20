@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const abrirModalBtn = document.querySelector("#abrirModal");
     const fecharModalBtn = document.querySelector(".fecharModal");
     const form = document.querySelector("#formAtendimento");
+    const API_URL = 'http://https://projetozelo.onrender.com'; // URL do backend
 
     // Função para renderizar a tabela de uma aba
     function renderizarTabela(aba, dados) {
@@ -32,15 +33,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Função para carregar os atendimentos
-    function carregarAtendimentos() {
-        fetch('http://localhost:3000/atendimentos')
-            .then(response => response.json())
-            .then(data => {
-                renderizarTabela("emAndamento", data.filter(item => item.status === 'emAndamento'));
-                renderizarTabela("zeloInforma", data.filter(item => item.status === 'zeloInforma'));
-                renderizarTabela("finalizado", data.filter(item => item.status === 'finalizado'));
-            })
-            .catch(error => console.error('Erro ao buscar atendimentos:', error));
+    async function carregarAtendimentos() {
+        try {
+            const response = await fetch(`${API_URL}/atendimentos`);
+            if (!response.ok) {
+                throw new Error('Erro ao buscar atendimentos');
+            }
+            const data = await response.json();
+            renderizarTabela("emAndamento", data.filter(item => item.status === 'emAndamento'));
+            renderizarTabela("zeloInforma", data.filter(item => item.status === 'zeloInforma'));
+            renderizarTabela("finalizado", data.filter(item => item.status === 'finalizado'));
+        } catch (error) {
+            console.error('Erro ao buscar atendimentos:', error);
+            alert('Erro ao buscar atendimentos. Verifique o console para mais detalhes.');
+        }
     }
 
     // Inicializa as tabelas
@@ -76,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Adicionar atendimento ao enviar o formulário
-    document.getElementById("formAtendimento").addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         const novoAtendimento = {
@@ -89,40 +95,40 @@ document.addEventListener("DOMContentLoaded", function () {
             status: document.getElementById("status").value
         };
 
-        // Verifica se o número Vegas já existe
-        fetch('http://localhost:3000/atendimentos')
-            .then(response => response.json())
-            .then(data => {
-                const existe = data.some(item => item.numeroVegas === novoAtendimento.numeroVegas);
-                if (existe) {
-                    alert("Atendimento com este N° Vegas já existe!");
-                    return;
-                }
+        try {
+            // Verifica se o número Vegas já existe
+            const response = await fetch(`${API_URL}/atendimentos`);
+            if (!response.ok) {
+                throw new Error('Erro ao buscar atendimentos');
+            }
+            const data = await response.json();
+            const existe = data.some(item => item.numeroVegas === novoAtendimento.numeroVegas);
+            if (existe) {
+                alert("Atendimento com este N° Vegas já existe!");
+                return;
+            }
 
-                // Se não existir, envia o novo atendimento
-                fetch('http://localhost:3000/atendimentos', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(novoAtendimento)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert("Atendimento adicionado com sucesso!");
-                    carregarAtendimentos(); // Atualiza a tabela
-                    document.getElementById("formAtendimento").reset(); // Limpa o formulário
-                    document.getElementById("modal").style.display = "none"; // Fecha a modal
-                })
-                .catch(error => {
-                    console.error('Erro ao adicionar atendimento:', error);
-                    alert("Erro ao adicionar atendimento. Verifique o console para mais detalhes.");
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao buscar atendimentos:', error);
-                alert("Erro ao buscar atendimentos. Verifique o console para mais detalhes.");
+            // Se não existir, envia o novo atendimento
+            const postResponse = await fetch(`${API_URL}/atendimentos`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(novoAtendimento)
             });
+
+            if (!postResponse.ok) {
+                throw new Error('Erro ao adicionar atendimento');
+            }
+
+            alert("Atendimento adicionado com sucesso!");
+            carregarAtendimentos(); // Atualiza a tabela
+            form.reset(); // Limpa o formulário
+            modal.style.display = "none"; // Fecha a modal
+        } catch (error) {
+            console.error('Erro ao adicionar atendimento:', error);
+            alert("Erro ao adicionar atendimento. Verifique o console para mais detalhes.");
+        }
     });
 
     // Filtro de pesquisa
