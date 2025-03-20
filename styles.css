@@ -12,18 +12,22 @@
 }
 
 body {
+    margin: 0; /* Garantir que não há margens no body */
+    padding: 0; /* Garantir que não há preenchimentos no body */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #E5E7EB; /* Cinza claro elegante */
-    color: #1F2937; /* Cinza escuro para melhor leitura */
+    background-color: #E5E7EB;
+    color: #1F2937;
     line-height: 1.6;
 }
 
+
+/* Estilo para o container principal */
 .container {
     width: 90%;
     max-width: 1200px;
-    margin: 50px auto;
+    margin: 0 auto; /* Margem superior e inferior zerada */
     padding: 20px;
-    background-color: #FFFFFF; /* Fundo branco puro */
+    background-color: #FFFFFF;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

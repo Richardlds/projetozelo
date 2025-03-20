@@ -4,53 +4,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabelaZeloInforma = document.querySelector('#zeloInforma tbody');
     const tabelaFinalizado = document.querySelector('#finalizado tbody');
 
+let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
+
     // Função para adicionar atendimento
     formAtendimento.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        // Captura os dados do formulário
-        const numeroVegas = document.getElementById('numeroVegas').value.trim();
-        const cpfTitular = document.getElementById('cpfTitular').value.trim();
-        const nomeTitular = document.getElementById('nomeTitular').value.trim();
-        const nomeFalecido = document.getElementById('nomeFalecido').value.trim();
-        const cidadeEstado = document.getElementById('cidadeEstado').value.trim();
-        const prestador = document.getElementById('prestador').value.trim();
-        const status = document.getElementById('status').value;
+    // Captura os dados do formulário
+    const numeroVegas = document.getElementById('numeroVegas').value.trim();
+    const cpfTitular = document.getElementById('cpfTitular').value.trim();
+    const nomeTitular = document.getElementById('nomeTitular').value.trim();
+    const nomeFalecido = document.getElementById('nomeFalecido').value.trim();
+    const cidadeEstado = document.getElementById('cidadeEstado').value.trim();
+    const prestador = document.getElementById('prestador').value.trim();
+    const status = document.getElementById('status').value;
 
-        // Valida se todos os campos obrigatórios foram preenchidos
-        if (!numeroVegas || !cpfTitular || !nomeTitular || !nomeFalecido || !cidadeEstado || !prestador || !status) {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
+    // Valida se todos os campos obrigatórios foram preenchidos
+    if (!numeroVegas || !cpfTitular || !nomeTitular || !nomeFalecido || !cidadeEstado || !prestador || !status) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+    }
 
-        // Cria o objeto do atendimento
-        const atendimento = {
-            numeroVegas,
-            cpfTitular,
-            nomeTitular,
-            nomeFalecido,
-            cidadeEstado,
-            prestador,
-            status,
-            observacoes: [], // Observações são opcionais e começam vazias
-        };
+    // Cria o objeto do atendimento
+    const atendimento = {
+        numeroVegas,
+        cpfTitular,
+        nomeTitular,
+        nomeFalecido,
+        cidadeEstado,
+        prestador,
+        status,
+        observacoes: [], // Observações são opcionais e começam vazias
+    };
 
-        // Adiciona o atendimento ao array
-        atendimentos.push(atendimento);
+    // Adiciona o atendimento ao array
+    atendimentos.push(atendimento);
 
-        // Salva no localStorage
-        localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
+    // Salva no localStorage
+    localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
 
-        // Atualiza a tabela correspondente ao status
-        atualizarTabela(atendimento);
+    // Atualiza a tabela correspondente ao status
+    atualizarTabela(atendimento);
 
-        // Exibe o pop-up de confirmação
-        mostrarPopupConfirmacaoSalvar();
+    // Exibe o pop-up de confirmação
+    mostrarPopupConfirmacaoSalvar();
 
-        // Fecha a modal e limpa o formulário
-        fecharModal();
-        formAtendimento.reset();
-    });
+    // Fecha a modal e limpa o formulário
+    fecharModal();
+    formAtendimento.reset();
+});
 
     // Função para mostrar o pop-up de confirmação de salvamento
     function mostrarPopupConfirmacaoSalvar() {
