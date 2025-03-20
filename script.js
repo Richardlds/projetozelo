@@ -4,55 +4,56 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabelaZeloInforma = document.querySelector('#zeloInforma tbody');
     const tabelaFinalizado = document.querySelector('#finalizado tbody');
 
-let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
+    // Inicializa o array de atendimentos
+    let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
 
     // Função para adicionar atendimento
     formAtendimento.addEventListener('submit', function (e) {
         e.preventDefault();
 
-    // Captura os dados do formulário
-    const numeroVegas = document.getElementById('numeroVegas').value.trim();
-    const cpfTitular = document.getElementById('cpfTitular').value.trim();
-    const nomeTitular = document.getElementById('nomeTitular').value.trim();
-    const nomeFalecido = document.getElementById('nomeFalecido').value.trim();
-    const cidadeEstado = document.getElementById('cidadeEstado').value.trim();
-    const prestador = document.getElementById('prestador').value.trim();
-    const status = document.getElementById('status').value;
+        // Captura os dados do formulário
+        const numeroVegas = document.getElementById('numeroVegas').value.trim();
+        const cpfTitular = document.getElementById('cpfTitular').value.trim();
+        const nomeTitular = document.getElementById('nomeTitular').value.trim();
+        const nomeFalecido = document.getElementById('nomeFalecido').value.trim();
+        const cidadeEstado = document.getElementById('cidadeEstado').value.trim();
+        const prestador = document.getElementById('prestador').value.trim();
+        const status = document.getElementById('status').value;
 
-    // Valida se todos os campos obrigatórios foram preenchidos
-    if (!numeroVegas || !cpfTitular || !nomeTitular || !nomeFalecido || !cidadeEstado || !prestador || !status) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
+        // Valida se todos os campos obrigatórios foram preenchidos
+        if (!numeroVegas || !cpfTitular || !nomeTitular || !nomeFalecido || !cidadeEstado || !prestador || !status) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
 
-    // Cria o objeto do atendimento
-    const atendimento = {
-        numeroVegas,
-        cpfTitular,
-        nomeTitular,
-        nomeFalecido,
-        cidadeEstado,
-        prestador,
-        status,
-        observacoes: [], // Observações são opcionais e começam vazias
-    };
+        // Cria o objeto do atendimento
+        const atendimento = {
+            numeroVegas,
+            cpfTitular,
+            nomeTitular,
+            nomeFalecido,
+            cidadeEstado,
+            prestador,
+            status,
+            observacoes: [], // Observações são opcionais e começam vazias
+        };
 
-    // Adiciona o atendimento ao array
-    atendimentos.push(atendimento);
+        // Adiciona o atendimento ao array
+        atendimentos.push(atendimento);
 
-    // Salva no localStorage
-    localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
+        // Salva no localStorage
+        localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
 
-    // Atualiza a tabela correspondente ao status
-    atualizarTabela(atendimento);
+        // Atualiza a tabela correspondente ao status
+        atualizarTabela(atendimento);
 
-    // Exibe o pop-up de confirmação
-    mostrarPopupConfirmacaoSalvar();
+        // Exibe o pop-up de confirmação
+        mostrarPopupConfirmacaoSalvar();
 
-    // Fecha a modal e limpa o formulário
-    fecharModal();
-    formAtendimento.reset();
-});
+        // Fecha a modal e limpa o formulário
+        fecharModal();
+        formAtendimento.reset();
+    });
 
     // Função para mostrar o pop-up de confirmação de salvamento
     function mostrarPopupConfirmacaoSalvar() {
@@ -125,54 +126,4 @@ let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
 
     // Carrega os atendimentos ao abrir a página
     carregarAtendimentos();
-});
-
-// Adicionar evento de input no campo de pesquisa
-document.getElementById('campoPesquisa').addEventListener('input', function () {
-    const termo = this.value.trim().toLowerCase();
-    filtrarAtendimentos(termo);
-});
-
-// Função para filtrar atendimentos
-function filtrarAtendimentos(termo) {
-    const linhasEmAndamento = document.querySelectorAll('#emAndamento tbody tr');
-    const linhasZeloInforma = document.querySelectorAll('#zeloInforma tbody tr');
-    const linhasFinalizado = document.querySelectorAll('#finalizado tbody tr');
-
-    filtrarTabela(linhasEmAndamento, termo);
-    filtrarTabela(linhasZeloInforma, termo);
-    filtrarTabela(linhasFinalizado, termo);
-}
-
-// Função para filtrar uma tabela específica
-function filtrarTabela(linhas, termo) {
-    linhas.forEach(linha => {
-        const textoLinha = linha.textContent.toLowerCase();
-        if (textoLinha.includes(termo)) {
-            linha.style.display = '';
-        } else {
-            linha.style.display = 'none';
-        }
-    });
-}
-
-// Adicionar eventos aos botões das abas
-document.querySelectorAll('.abaLink').forEach(botao => {
-    botao.addEventListener('click', function () {
-        const aba = this.getAttribute('data-aba');
-
-        // Remove a classe 'active' de todos os botões
-        document.querySelectorAll('.abaLink').forEach(b => b.classList.remove('active'));
-
-        // Adiciona a classe 'active' ao botão clicado
-        this.classList.add('active');
-
-        // Oculta todas as tabelas
-        document.querySelectorAll('.abaConteudo').forEach(tabela => {
-            tabela.classList.remove('active');
-        });
-
-        // Exibe a tabela correspondente à aba clicada
-        document.getElementById(aba).classList.add('active');
-    });
 });
