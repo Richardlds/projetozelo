@@ -8,20 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const numeroVegas = urlParams.get('numeroVegas');
 
-    // Simulação de um array de atendimentos (substitua por dados reais)
-    const atendimentos = [
-        {
-            numeroVegas: '12345',
-            cpfTitular: '123.456.789-00',
-            nomeTitular: 'Fulano de Tal',
-            nomeFalecido: 'Ciclano de Tal',
-            cidadeEstado: 'São Paulo/SP',
-            prestador: 'Hospital X',
-            status: 'emAndamento',
-            observacoes: [],
-        },
-        // Adicione mais atendimentos aqui...
-    ];
+    // Carrega os atendimentos do localStorage
+    let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
 
     // Busca o atendimento pelo número do Vegas
     const atendimento = atendimentos.find(at => at.numeroVegas === numeroVegas);
@@ -63,6 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
             atendimento.observacoes.push(observacao);
             atualizarListaObservacoes();
             campoObservacoes.value = '';
+
+            // Salva no localStorage
+            localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
         }
     });
 
@@ -78,8 +69,17 @@ document.addEventListener('DOMContentLoaded', function () {
         atendimento.prestador = document.getElementById('prestador').value;
         atendimento.status = document.getElementById('status').value;
 
+        // Salva no localStorage
+        localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
+
         alert('Atendimento atualizado com sucesso!');
+        window.location.href = 'index.html'; // Redireciona para a página principal
     });
+
+    // Função para fechar a janela de detalhes
+    function fecharDetalhes() {
+        window.location.href = 'index.html';
+    }
 
     // Carrega os dados ao abrir a página
     carregarDados();

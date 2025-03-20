@@ -253,3 +253,18 @@ form button:hover {
         width: 95%;
     }
 }
+
+/* Estilo para o botão de fechar (x) na página de detalhes */
+.fecharDetalhes {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.fecharDetalhes:hover {
+    color: #007bff;
+}

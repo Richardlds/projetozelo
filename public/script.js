@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabelaFinalizado = document.querySelector('#finalizado tbody');
 
     // Array para armazenar os atendimentos
-    let atendimentos = [];
+    let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
 
     // Função para adicionar atendimento
     formAtendimento.addEventListener('submit', function (e) {
@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Adiciona o atendimento ao array
         atendimentos.push(atendimento);
+
+        // Salva no localStorage
+        localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
 
         // Atualiza a tabela correspondente ao status
         atualizarTabela(atendimento);
@@ -106,4 +109,14 @@ document.addEventListener('DOMContentLoaded', function () {
             modalConfirmacao.style.display = 'none';
         }, 2000);
     }
+
+    // Carregar atendimentos ao abrir a página
+    function carregarAtendimentos() {
+        atendimentos.forEach(atendimento => {
+            atualizarTabela(atendimento);
+        });
+    }
+
+    // Carrega os atendimentos ao abrir a página
+    carregarAtendimentos();
 });
