@@ -8,12 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- Botão de fechar (x) -->
-        <span class="fecharDetalhes" onclick="fecharDetalhes()">&times;</span>
         <h1>Detalhes do Atendimento</h1>
+        
+       
 
         <!-- Formulário de edição -->
         <form id="editarAtendimento">
+          
             <label for="numeroVegas">N° Vegas:</label>
             <input type="text" id="numeroVegas" name="numeroVegas" required readonly>
 
@@ -40,46 +41,43 @@
             </select>
 
             <!-- Área de checklist e observações -->
-<div class="checklist-observacoes-container">
-    <!-- Checklist -->
-    <div style="flex: 1;">
-        <h2>Checklist</h2>
-        <ul id="checklist">
-            <li>
-                <input type="checkbox" id="checklistRGtitular">
-                <label for="checklistRGtitular">RG Titular / Declarante</label>
-            </li>
-            <li>
-                <input type="checkbox" id="checklistRGfalecido">
-                <label for="checklistRGfalecido">RG Falecido</label>
-            </li>
-            <li>
-                <input type="checkbox" id="checklistDeclaracaoObito">
-                <label for="checklistDeclaracaoObito">Declaração de Óbito</label>
-            </li>
-            <li>
-                <input type="checkbox" id="checklistNotaFiscal">
-                <label for="checklistNotaFiscal">Nota Fiscal</label>
-            </li>
-            <li>
-                <input type="checkbox" id="checklistOrcamento">
-                <label for="checklistOrcamento">Orçamento</label>
-            </li>
-        </ul>
-    </div>
+            <div class="checklist-observacoes-container">
+                <div style="flex: 1;">
+                    <h2>Checklist</h2>
+                    <ul id="checklist">
+                        <li>
+                            <input type="checkbox" id="checklistRGtitular">
+                            <label for="checklistRGtitular">RG Titular / Declarante</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="checklistRGfalecido">
+                            <label for="checklistRGfalecido">RG Falecido</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="checklistDeclaracaoObito">
+                            <label for="checklistDeclaracaoObito">Declaração de Óbito</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="checklistNotaFiscal">
+                            <label for="checklistNotaFiscal">Nota Fiscal</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="checklistOrcamento">
+                            <label for="checklistOrcamento">Orçamento</label>
+                        </li>
+                    </ul>
+                </div>
 
-    <!-- Área de observações -->
-    <div class="observacoes-container">
-        <h2>Observações</h2>
-        <textarea id="observacoes" rows="5" placeholder="Adicione uma observação..."></textarea>
-        <button id="adicionarObservacao">Adicionar Observação</button>
+                <div class="observacoes-container">
+                    <h2>Observações</h2>
+                    <textarea id="observacoes" rows="5" placeholder="Adicione uma observação..."></textarea>
+                    <button type="button" id="adicionarObservacao">Adicionar Observação</button>
 
-        <!-- Lista de observações -->
-        <ul id="listaObservacoes">
-            <!-- Observações serão adicionadas aqui via JavaScript -->
-        </ul>
-    </div>
-</div>
+                    <ul id="listaObservacoes">
+                        <!-- Observações serão adicionadas aqui via JavaScript -->
+                    </ul>
+                </div>
+            </div>
 
             <!-- Botão Salvar Alterações -->
             <button type="submit" style="margin-top: 20px;">Salvar Alterações</button>

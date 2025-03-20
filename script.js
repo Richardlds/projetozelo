@@ -3,43 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabelaEmAndamento = document.querySelector('#emAndamento tbody');
     const tabelaZeloInforma = document.querySelector('#zeloInforma tbody');
     const tabelaFinalizado = document.querySelector('#finalizado tbody');
-// Array para armazenar os atendimentos
-let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
-// TEMPORARIO TEMPORARIO TEMPORARIO TEMPORARIO TEMPORARIO OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
- {
-    // Atendimentos em andamento
-    atendimentos.push(
-        { numeroVegas: '1001', cpfTitular: '123.456.789-00', nomeTitular: 'João Silva', nomeFalecido: 'Maria Silva', cidadeEstado: 'São Paulo/SP', prestador: 'Funerária A', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1002', cpfTitular: '234.567.890-11', nomeTitular: 'Carlos Oliveira', nomeFalecido: 'Ana Oliveira', cidadeEstado: 'Rio de Janeiro/RJ', prestador: 'Funerária B', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1003', cpfTitular: '345.678.901-22', nomeTitular: 'Fernanda Costa', nomeFalecido: 'Pedro Costa', cidadeEstado: 'Belo Horizonte/MG', prestador: 'Funerária C', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1004', cpfTitular: '456.789.012-33', nomeTitular: 'Ricardo Santos', nomeFalecido: 'Juliana Santos', cidadeEstado: 'Curitiba/PR', prestador: 'Funerária D', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1005', cpfTitular: '567.890.123-44', nomeTitular: 'Patrícia Lima', nomeFalecido: 'Roberto Lima', cidadeEstado: 'Porto Alegre/RS', prestador: 'Funerária E', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1006', cpfTitular: '678.901.234-55', nomeTitular: 'Lucas Pereira', nomeFalecido: 'Carla Pereira', cidadeEstado: 'Salvador/BA', prestador: 'Funerária F', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1007', cpfTitular: '789.012.345-66', nomeTitular: 'Mariana Alves', nomeFalecido: 'Gustavo Alves', cidadeEstado: 'Recife/PE', prestador: 'Funerária G', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1008', cpfTitular: '890.123.456-77', nomeTitular: 'Felipe Rocha', nomeFalecido: 'Tatiane Rocha', cidadeEstado: 'Fortaleza/CE', prestador: 'Funerária H', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1009', cpfTitular: '901.234.567-88', nomeTitular: 'Amanda Souza', nomeFalecido: 'Rodrigo Souza', cidadeEstado: 'Brasília/DF', prestador: 'Funerária I', status: 'emAndamento', observacoes: [] },
-        { numeroVegas: '1010', cpfTitular: '012.345.678-99', nomeTitular: 'Bruno Martins', nomeFalecido: 'Camila Martins', cidadeEstado: 'Manaus/AM', prestador: 'Funerária J', status: 'emAndamento', observacoes: [] }
-    );
 
-    // Atendimentos em Zelo Informa
-    atendimentos.push(
-        { numeroVegas: '2001', cpfTitular: '111.222.333-44', nomeTitular: 'Ana Paula', nomeFalecido: 'José Silva', cidadeEstado: 'São Paulo/SP', prestador: 'Funerária K', status: 'zeloInforma', observacoes: [] },
-        { numeroVegas: '2002', cpfTitular: '222.333.444-55', nomeTitular: 'Roberto Carlos', nomeFalecido: 'Maria Clara', cidadeEstado: 'Rio de Janeiro/RJ', prestador: 'Funerária L', status: 'zeloInforma', observacoes: [] },
-        { numeroVegas: '2003', cpfTitular: '333.444.555-66', nomeTitular: 'Carla Dias', nomeFalecido: 'Antônio Dias', cidadeEstado: 'Belo Horizonte/MG', prestador: 'Funerária M', status: 'zeloInforma', observacoes: [] },
-        { numeroVegas: '2004', cpfTitular: '444.555.666-77', nomeTitular: 'Marcos Lima', nomeFalecido: 'Fernanda Lima', cidadeEstado: 'Curitiba/PR', prestador: 'Funerária N', status: 'zeloInforma', observacoes: [] },
-        { numeroVegas: '2005', cpfTitular: '555.666.777-88', nomeTitular: 'Juliana Rocha', nomeFalecido: 'Ricardo Rocha', cidadeEstado: 'Porto Alegre/RS', prestador: 'Funerária O', status: 'zeloInforma', observacoes: [] }
-    );
+    // Array para armazenar os atendimentos
+    let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
 
-    // Atendimentos finalizados
-    atendimentos.push(
-        { numeroVegas: '3001', cpfTitular: '666.777.888-99', nomeTitular: 'Paulo Henrique', nomeFalecido: 'Luciana Silva', cidadeEstado: 'São Paulo/SP', prestador: 'Funerária P', status: 'finalizado', observacoes: [] },
-        { numeroVegas: '3002', cpfTitular: '777.888.999-00', nomeTitular: 'Luiza Almeida', nomeFalecido: 'Carlos Almeida', cidadeEstado: 'Rio de Janeiro/RJ', prestador: 'Funerária Q', status: 'finalizado', observacoes: [] }
-    );
-
-    // Salva os atendimentos de exemplo no localStorage
-    localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
-}
-// TEMPORARIO TEMPORARIO TEMPORARIO TEMPORARIO TEMPORARIO OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     // Função para adicionar atendimento
     formAtendimento.addEventListener('submit', function (e) {
         e.preventDefault();
