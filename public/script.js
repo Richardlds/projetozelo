@@ -120,3 +120,101 @@ document.addEventListener('DOMContentLoaded', function () {
     // Carrega os atendimentos ao abrir a página
     carregarAtendimentos();
 });
+// Adicionar evento de input no campo de pesquisa
+document.getElementById('campoPesquisa').addEventListener('input', function () {
+    const termo = this.value.trim().toLowerCase();
+    filtrarAtendimentos(termo);
+});
+
+// Função para filtrar atendimentos
+function filtrarAtendimentos(termo) {
+    const linhasEmAndamento = document.querySelectorAll('#emAndamento tbody tr');
+    const linhasZeloInforma = document.querySelectorAll('#zeloInforma tbody tr');
+    const linhasFinalizado = document.querySelectorAll('#finalizado tbody tr');
+
+    filtrarTabela(linhasEmAndamento, termo);
+    filtrarTabela(linhasZeloInforma, termo);
+    filtrarTabela(linhasFinalizado, termo);
+}
+
+// Função para filtrar uma tabela específica
+function filtrarTabela(linhas, termo) {
+    linhas.forEach(linha => {
+        const textoLinha = linha.textContent.toLowerCase();
+        if (textoLinha.includes(termo)) {
+            linha.style.display = '';
+        } else {
+            linha.style.display = 'none';
+        }
+    });
+}
+// Adicionar eventos aos botões das abas
+document.querySelectorAll('.abaLink').forEach(botao => {
+    botao.addEventListener('click', function () {
+        const aba = this.getAttribute('data-aba');
+
+        // Remove a classe 'active' de todos os botões
+        document.querySelectorAll('.abaLink').forEach(b => b.classList.remove('active'));
+
+        // Adiciona a classe 'active' ao botão clicado
+        this.classList.add('active');
+
+        // Oculta todas as tabelas
+        document.querySelectorAll('.abaConteudo').forEach(tabela => {
+            tabela.classList.remove('active');
+        });
+
+        // Exibe a tabela correspondente à aba clicada
+        document.getElementById(aba).classList.add('active');
+    });
+});
+// Salva as alterações do formulário
+formEditar.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Atualiza os dados do atendimento
+    atendimento.cpfTitular = document.getElementById('cpfTitular').value;
+    atendimento.nomeTitular = document.getElementById('nomeTitular').value;
+    atendimento.nomeFalecido = document.getElementById('nomeFalecido').value;
+    atendimento.cidadeEstado = document.getElementById('cidadeEstado').value;
+    atendimento.prestador = document.getElementById('prestador').value;
+    atendimento.status = document.getElementById('status').value;
+
+    // Salva no localStorage
+    localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
+
+    alert('Atendimento atualizado com sucesso!');
+    window.location.href = 'index.html'; // Redireciona para a página principal
+});
+function atualizarTabela(atendimento) {
+    // Remove o atendimento de todas as tabelas
+    const linhas = document.querySelectorAll('tbody tr');
+    linhas.forEach(linha => {
+        if (linha.querySelector('td').textContent === atendimento.numeroVegas) {
+            linha.remove();
+        }
+    });
+
+    // Adiciona o atendimento na tabela correta
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${atendimento.numeroVegas}</td>
+        <td>${atendimento.cpfTitular}</td>
+        <td>${atendimento.nomeTitular}</td>
+        <td>${atendimento.nomeFalecido}</td>
+        <td>${atendimento.cidadeEstado}</td>
+        <td>${atendimento.prestador}</td>
+    `;
+
+    // Adiciona um evento de clique na linha para abrir o atendimento
+    row.addEventListener('click', () => abrirDetalhes(atendimento.numeroVegas));
+
+    // Adiciona a linha na tabela correta
+    if (atendimento.status === 'emAndamento') {
+        tabelaEmAndamento.appendChild(row);
+    } else if (atendimento.status === 'zeloInforma') {
+        tabelaZeloInforma.appendChild(row);
+    } else if (atendimento.status === 'finalizado') {
+        tabelaFinalizado.appendChild(row);
+    }
+}

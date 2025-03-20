@@ -77,10 +77,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Função para fechar a janela de detalhes
-    function fecharDetalhes() {
-        window.location.href = 'index.html';
-    }
+function fecharDetalhes() {
+    window.location.href = 'index.html'; // Redireciona para a página principal
+}
+
+// Adicionar evento ao botão de fechar (x)
+document.querySelector('.fecharDetalhes').addEventListener('click', fecharDetalhes);
 
     // Carrega os dados ao abrir a página
     carregarDados();
+});
+// Função para deletar atendimento
+document.getElementById('deletarAtendimento').addEventListener('click', function () {
+    const modalConfirmacao = document.getElementById('modalConfirmacao');
+    modalConfirmacao.style.display = 'flex';
+});
+
+// Confirmar deleção
+document.getElementById('confirmarDelecao').addEventListener('click', function () {
+    // Remove o atendimento do array
+    atendimentos = atendimentos.filter(at => at.numeroVegas !== numeroVegas);
+
+    // Salva no localStorage
+    localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
+
+    // Fecha o modal de confirmação
+    document.getElementById('modalConfirmacao').style.display = 'none';
+
+    // Redireciona para a página principal
+    window.location.href = 'index.html';
+});
+
+// Cancelar deleção
+document.getElementById('cancelarDelecao').addEventListener('click', function () {
+    document.getElementById('modalConfirmacao').style.display = 'none';
 });
