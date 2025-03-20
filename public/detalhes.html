@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Atendimento</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Atendimento</h1>
+
+        <!-- Formulário de edição -->
+        <form id="editarAtendimento">
+            <label for="numeroVegas">N° Vegas:</label>
+            <input type="text" id="numeroVegas" name="numeroVegas" required readonly>
+
+            <label for="cpfTitular">CPF Titular:</label>
+            <input type="text" id="cpfTitular" name="cpfTitular" required>
+
+            <label for="nomeTitular">Nome Titular:</label>
+            <input type="text" id="nomeTitular" name="nomeTitular" required>
+
+            <label for="nomeFalecido">Nome Falecido:</label>
+            <input type="text" id="nomeFalecido" name="nomeFalecido" required>
+
+            <label for="cidadeEstado">Cidade/Estado:</label>
+            <input type="text" id="cidadeEstado" name="cidadeEstado" required>
+
+            <label for="prestador">Prestador:</label>
+            <input type="text" id="prestador" name="prestador" required>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="emAndamento">Em andamento</option>
+                <option value="zeloInforma">Zelo Informa</option>
+                <option value="finalizado">Finalizado</option>
+            </select>
+
+            <button type="submit">Salvar Alterações</button>
+        </form>
+
+        <!-- Área de observações -->
+        <h2>Observações</h2>
+        <textarea id="observacoes" rows="5" placeholder="Adicione uma observação..."></textarea>
+        <button id="adicionarObservacao">Adicionar Observação</button>
+
+        <!-- Lista de observações -->
+        <ul id="listaObservacoes">
+            <!-- Observações serão adicionadas aqui via JavaScript -->
+        </ul>
+
+        <!-- Botão para deletar atendimento -->
+        <button id="deletarAtendimento" style="background-color: #dc3545; margin-top: 20px;">Deletar Atendimento</button>
+
+        <!-- Modal de confirmação para deletar -->
+        <div id="modalConfirmacao" class="modal">
+            <div class="modal-content">
+                <h2>Confirmar Exclusão</h2>
+                <p>Tem certeza que deseja excluir este atendimento?</p>
+                <button id="confirmarDelecao">Sim, Excluir</button>
+                <button id="cancelarDelecao">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/detalhes.js"></script>
+</body>
+</html>
