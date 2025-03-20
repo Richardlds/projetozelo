@@ -20,6 +20,17 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // Inicializa o checklist se não existir
+    if (!atendimento.checklist) {
+        atendimento.checklist = {
+            rgTitular: false,
+            rgFalecido: false,
+            declaracaoObito: false,
+            notaFiscal: false,
+            orcamento: false,
+        };
+    }
+
     // Carrega os dados do atendimento no formulário
     function carregarDados() {
         document.getElementById('numeroVegas').value = atendimento.numeroVegas;
@@ -27,16 +38,23 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('nomeTitular').value = atendimento.nomeTitular;
         document.getElementById('nomeFalecido').value = atendimento.nomeFalecido;
         document.getElementById('cidadeEstado').value = atendimento.cidadeEstado;
-                document.getElementById('prestador').value = atendimento.prestador;
+        document.getElementById('prestador').value = atendimento.prestador;
         document.getElementById('status').value = atendimento.status;
 
         // Carrega as observações
         atualizarListaObservacoes();
+
+        // Carrega o checklist
+        document.getElementById('checklistRGtitular').checked = atendimento.checklist.rgTitular;
+        document.getElementById('checklistRGfalecido').checked = atendimento.checklist.rgFalecido;
+        document.getElementById('checklistDeclaracaoObito').checked = atendimento.checklist.declaracaoObito;
+        document.getElementById('checklistNotaFiscal').checked = atendimento.checklist.notaFiscal;
+        document.getElementById('checklistOrcamento').checked = atendimento.checklist.orcamento;
     }
 
     // Atualiza a lista de observações
     function atualizarListaObservacoes() {
-        listaObservacoes.innerHTML = '';
+        listaObservacoes.innerHTML = ''; // Limpa a lista antes de recarregar
         atendimento.observacoes.forEach(obs => {
             const li = document.createElement('li');
             li.textContent = obs;
@@ -48,16 +66,16 @@ document.addEventListener('DOMContentLoaded', function () {
     btnAdicionarObservacao.addEventListener('click', function () {
         const observacao = campoObservacoes.value.trim();
         if (observacao) {
-            atendimento.observacoes.push(observacao);
-            atualizarListaObservacoes();
-            campoObservacoes.value = '';
+            atendimento.observacoes.push(observacao); // Adiciona a nova observação ao array
+            atualizarListaObservacoes(); // Atualiza a lista de observações
+            campoObservacoes.value = ''; // Limpa o campo de texto
 
             // Salva no localStorage
             localStorage.setItem('atendimentos', JSON.stringify(atendimentos));
         }
     });
 
-    // Salva as alterações do formulário
+    // Salva as alterações do formulário e do checklist
     formEditar.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -68,6 +86,13 @@ document.addEventListener('DOMContentLoaded', function () {
         atendimento.cidadeEstado = document.getElementById('cidadeEstado').value;
         atendimento.prestador = document.getElementById('prestador').value;
         atendimento.status = document.getElementById('status').value;
+
+        // Atualiza o checklist
+        atendimento.checklist.rgTitular = document.getElementById('checklistRGtitular').checked;
+        atendimento.checklist.rgFalecido = document.getElementById('checklistRGfalecido').checked;
+        atendimento.checklist.declaracaoObito = document.getElementById('checklistDeclaracaoObito').checked;
+        atendimento.checklist.notaFiscal = document.getElementById('checklistNotaFiscal').checked;
+        atendimento.checklist.orcamento = document.getElementById('checklistOrcamento').checked;
 
         // Salva no localStorage
         localStorage.setItem('atendimentos', JSON.stringify(atendimentos));

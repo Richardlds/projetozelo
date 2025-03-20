@@ -39,10 +39,37 @@
                 <option value="finalizado">Finalizado</option>
             </select>
 
-            <button type="submit">Salvar Alterações</button>
-        </form>
+            <!-- Área de checklist e observações -->
+<div class="checklist-observacoes-container">
+    <!-- Checklist -->
+    <div style="flex: 1;">
+        <h2>Checklist</h2>
+        <ul id="checklist">
+            <li>
+                <input type="checkbox" id="checklistRGtitular">
+                <label for="checklistRGtitular">RG Titular / Declarante</label>
+            </li>
+            <li>
+                <input type="checkbox" id="checklistRGfalecido">
+                <label for="checklistRGfalecido">RG Falecido</label>
+            </li>
+            <li>
+                <input type="checkbox" id="checklistDeclaracaoObito">
+                <label for="checklistDeclaracaoObito">Declaração de Óbito</label>
+            </li>
+            <li>
+                <input type="checkbox" id="checklistNotaFiscal">
+                <label for="checklistNotaFiscal">Nota Fiscal</label>
+            </li>
+            <li>
+                <input type="checkbox" id="checklistOrcamento">
+                <label for="checklistOrcamento">Orçamento</label>
+            </li>
+        </ul>
+    </div>
 
-        <!-- Área de observações -->
+    <!-- Área de observações -->
+    <div class="observacoes-container">
         <h2>Observações</h2>
         <textarea id="observacoes" rows="5" placeholder="Adicione uma observação..."></textarea>
         <button id="adicionarObservacao">Adicionar Observação</button>
@@ -51,6 +78,12 @@
         <ul id="listaObservacoes">
             <!-- Observações serão adicionadas aqui via JavaScript -->
         </ul>
+    </div>
+</div>
+
+            <!-- Botão Salvar Alterações -->
+            <button type="submit" style="margin-top: 20px;">Salvar Alterações</button>
+        </form>
 
         <!-- Botão para deletar atendimento -->
         <button id="deletarAtendimento" style="background-color: #dc3545; margin-top: 20px;">Deletar Atendimento</button>

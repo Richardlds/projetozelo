@@ -244,6 +244,16 @@ form button:hover {
     .abas {
         flex-direction: column;
     }
+
+    .abaLink {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+}
+
 /* Estilo para o modal de confirmação de salvamento */
 #modalConfirmacaoSalvar {
     display: none;
@@ -280,14 +290,6 @@ form button:hover {
 #modalConfirmacaoSalvar button:hover {
     background-color: #0056b3;
 }
-    .abaLink {
-        width: 100%;
-    }
-
-    .modal-content {
-        width: 95%;
-    }
-}
 
 /* Estilo para o botão de fechar (x) na página de detalhes */
 .fecharDetalhes {
@@ -302,4 +304,118 @@ form button:hover {
 
 .fecharDetalhes:hover {
     color: #007bff;
+}
+
+/* Estilo para a lista de observações */
+#listaObservacoes {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#listaObservacoes li {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+/* Estilo para o checklist */
+#checklist {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    margin-top: 20px;
+}
+
+#checklist li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+#checklist input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #007bff; /* Cor do checkbox quando marcado */
+}
+
+#checklist label {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#checklist label:hover {
+    color: #0056b3; /* Cor ao passar o mouse */
+}
+
+/* Estilo para o container do checklist e observações */
+.checklist-observacoes-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilo para a área de observações */
+.observacoes-container {
+    flex: 1;
+}
+
+/* Estilo para o textarea de observações */
+#observacoes {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#observacoes:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Estilo para o botão de adicionar observação */
+#adicionarObservacao {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#adicionarObservacao:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para a lista de observações */
+#listaObservacoes {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#listaObservacoes li {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    font-size: 14px;
+    color: #333;
+}
 }
