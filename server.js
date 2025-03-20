@@ -1,26 +1,9 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 const path = require('path');
-const cors = require('cors'); // Adicionado para permitir requisições de diferentes origens
+const cors = require('cors');
 const app = express();
-const port = process.env.PORT || 3000; // Usar a porta do ambiente ou 3000
-
-// Configuração da conexão com o MySQL
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost', // Substitua pelo host do seu banco de dados
-    user: process.env.DB_USER || 'root', // Substitua pelo seu usuário do MySQL
-    password: process.env.DB_PASSWORD || '@Richard12e', // Substitua pela sua senha do MySQL
-    database: process.env.DB_NAME || 'atendimentos_db' // Substitua pelo nome do seu banco de dados
-});
-
-// Conectar ao banco de dados
-connection.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-        process.exit(1); // Encerra o processo em caso de erro
-    }
-    console.log('Conectado ao banco de dados MySQL');
-});
+const port = process.env.PORT || 3000;
 
 // Middleware para permitir o uso de JSON e CORS
 app.use(express.json());
@@ -29,6 +12,36 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     allowedHeaders: ['Content-Type', 'Authorization'] // Cabeçalhos permitidos
 }));
+
+// Conectar ao MongoDB Atlas
+const dbURI = process.env.DB_URI || 'mongodb+srv://richardlds2005:@Richard12e@zeloup.kclxl.mongodb.net/?retryWrites=true&w=majority&appName=ZELOUP';
+mongoose.connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Conectado ao MongoDB Atlas'))
+.catch(err => console.error('Erro ao conectar ao MongoDB Atlas:', err));
+
+// Definir o schema para atendimentos
+const atendimentoSchema = new mongoose.Schema({
+    numeroVegas: { type: String, required: true, unique: true },
+    cpfTitular: { type: String, required: true },
+    nomeTitular: { type: String, required: true },
+    nomeFalecido: { type: String, required: true },
+    cidadeEstado: { type: String, required: true },
+    prestador: { type: String, required: true },
+    status: { type: String, required: true }
+});
+
+// Definir o schema para observações
+const observacaoSchema = new mongoose.Schema({
+    numeroVegas: { type: String, required: true },
+    observacao: { type: String, required: true }
+});
+
+// Criar os modelos
+const Atendimento = mongoose.model('Atendimento', atendimentoSchema);
+const Observacao = mongoose.model('Observacao', observacaoSchema);
 
 // Servir arquivos estáticos (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,32 +52,30 @@ app.get('/', (req, res) => {
 });
 
 // Rota para buscar todos os atendimentos
-app.get('/atendimentos', (req, res) => {
-    connection.query('SELECT * FROM atendimentos', (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    });
+app.get('/atendimentos', async (req, res) => {
+    try {
+        const atendimentos = await Atendimento.find();
+        res.json(atendimentos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Rota para buscar um atendimento por número Vegas
-app.get('/atendimentos/:numeroVegas', (req, res) => {
-    const numeroVegas = req.params.numeroVegas;
-
-    connection.query('SELECT * FROM atendimentos WHERE numeroVegas = ?', [numeroVegas], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length === 0) {
+app.get('/atendimentos/:numeroVegas', async (req, res) => {
+    try {
+        const atendimento = await Atendimento.findOne({ numeroVegas: req.params.numeroVegas });
+        if (!atendimento) {
             return res.status(404).json({ error: 'Atendimento não encontrado' });
         }
-        res.json(results[0]);
-    });
+        res.json(atendimento);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Rota para adicionar um novo atendimento
-app.post('/atendimentos', (req, res) => {
+app.post('/atendimentos', async (req, res) => {
     const { numeroVegas, cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status } = req.body;
 
     // Validação básica dos campos
@@ -72,32 +83,33 @@ app.post('/atendimentos', (req, res) => {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    // Verifica se o atendimento já existe
-    connection.query('SELECT * FROM atendimentos WHERE numeroVegas = ?', [numeroVegas], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.length > 0) {
+    try {
+        // Verifica se o atendimento já existe
+        const atendimentoExistente = await Atendimento.findOne({ numeroVegas });
+        if (atendimentoExistente) {
             return res.status(400).json({ error: 'Atendimento já existe' });
         }
 
-        // Se não existir, insere o novo atendimento
-        connection.query(
-            'INSERT INTO atendimentos (numeroVegas, cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [numeroVegas, cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status],
-            (err, results) => {
-                if (err) {
-                    return res.status(500).json({ error: err.message });
-                }
-                res.json({ id: results.insertId });
-            }
-        );
-    });
+        // Cria um novo atendimento
+        const novoAtendimento = new Atendimento({
+            numeroVegas,
+            cpfTitular,
+            nomeTitular,
+            nomeFalecido,
+            cidadeEstado,
+            prestador,
+            status
+        });
+
+        await novoAtendimento.save();
+        res.json({ id: novoAtendimento._id });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Rota para atualizar um atendimento
-app.put('/atendimentos/:numeroVegas', (req, res) => {
-    const numeroVegas = req.params.numeroVegas;
+app.put('/atendimentos/:numeroVegas', async (req, res) => {
     const { cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status } = req.body;
 
     // Validação básica dos campos
@@ -105,55 +117,67 @@ app.put('/atendimentos/:numeroVegas', (req, res) => {
         return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
 
-    connection.query(
-        'UPDATE atendimentos SET cpfTitular = ?, nomeTitular = ?, nomeFalecido = ?, cidadeEstado = ?, prestador = ?, status = ? WHERE numeroVegas = ?',
-        [cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status, numeroVegas],
-        (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            if (results.affectedRows === 0) {
-                return res.status(404).json({ error: 'Atendimento não encontrado' });
-            }
-            res.json({ message: 'Atendimento atualizado com sucesso' });
+    try {
+        const atendimentoAtualizado = await Atendimento.findOneAndUpdate(
+            { numeroVegas: req.params.numeroVegas },
+            { cpfTitular, nomeTitular, nomeFalecido, cidadeEstado, prestador, status },
+            { new: true }
+        );
+
+        if (!atendimentoAtualizado) {
+            return res.status(404).json({ error: 'Atendimento não encontrado' });
         }
-    );
+
+        res.json({ message: 'Atendimento atualizado com sucesso', atendimento: atendimentoAtualizado });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Rota para excluir um atendimento
-app.delete('/atendimentos/:numeroVegas', (req, res) => {
-    const numeroVegas = req.params.numeroVegas;
+app.delete('/atendimentos/:numeroVegas', async (req, res) => {
+    try {
+        const atendimentoExcluido = await Atendimento.findOneAndDelete({ numeroVegas: req.params.numeroVegas });
 
-    connection.query('DELETE FROM atendimentos WHERE numeroVegas = ?', [numeroVegas], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (results.affectedRows === 0) {
+        if (!atendimentoExcluido) {
             return res.status(404).json({ error: 'Atendimento não encontrado' });
         }
+
         res.json({ message: 'Atendimento excluído com sucesso' });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Rota para adicionar uma observação a um atendimento
-app.post('/atendimentos/:numeroVegas/observacoes', (req, res) => {
-    const numeroVegas = req.params.numeroVegas;
+app.post('/atendimentos/:numeroVegas/observacoes', async (req, res) => {
     const { observacao } = req.body;
 
     if (!observacao) {
         return res.status(400).json({ error: 'A observação é obrigatória' });
     }
 
-    connection.query(
-        'INSERT INTO observacoes (numeroVegas, observacao) VALUES (?, ?)',
-        [numeroVegas, observacao],
-        (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ id: results.insertId });
-        }
-    );
+    try {
+        const novaObservacao = new Observacao({
+            numeroVegas: req.params.numeroVegas,
+            observacao
+        });
+
+        await novaObservacao.save();
+        res.json({ id: novaObservacao._id });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Rota para buscar observações de um atendimento
+app.get('/atendimentos/:numeroVegas/observacoes', async (req, res) => {
+    try {
+        const observacoes = await Observacao.find({ numeroVegas: req.params.numeroVegas });
+        res.json(observacoes);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Iniciar o servidor
