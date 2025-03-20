@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabelaZeloInforma = document.querySelector('#zeloInforma tbody');
     const tabelaFinalizado = document.querySelector('#finalizado tbody');
 
-    // Array para armazenar os atendimentos
-    let atendimentos = JSON.parse(localStorage.getItem('atendimentos')) || [];
-
     // Função para adicionar atendimento
     formAtendimento.addEventListener('submit', function (e) {
         e.preventDefault();
