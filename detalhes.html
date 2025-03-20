@@ -8,13 +8,15 @@
 </head>
 <body>
     <div class="container">
+      <div class="fecharDetalhescontainer"><!-- Botão de fechar (x) dentro do container -->
+        <span class="fecharDetalhes" onclick="fecharDetalhes()">&times;</span></div>
+       
         <h1>Detalhes do Atendimento</h1>
         
        
 
         <!-- Formulário de edição -->
         <form id="editarAtendimento">
-          
             <label for="numeroVegas">N° Vegas:</label>
             <input type="text" id="numeroVegas" name="numeroVegas" required readonly>
 
